@@ -15,7 +15,8 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+  app.enableCors({ origin: '*',								methods:'GET,HEAD,PUT,PATCH,POST,DELETE',					credentials:true, });
+
   app.useGlobalInterceptors(new HttpExceptionInterceptor());
   
   const config = new DocumentBuilder()
@@ -38,6 +39,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  await app.listen(3000,'0.0.0.0');
 }
 bootstrap();

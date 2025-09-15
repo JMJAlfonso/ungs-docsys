@@ -2,7 +2,7 @@ services:
   react-app:
     build: ./ungs-docsys-front
     ports:
-      - "5173:5173"
+      - "80:5173"
     environment:
       - VITE_DOCSYS_BFF_URL=http://nest-app:3000
     depends_on:
