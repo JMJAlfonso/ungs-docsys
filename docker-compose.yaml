@@ -13,7 +13,7 @@ services:
   nest-app:
     build: ./ungs-docsys-bff
     ports:
-      - "8081:3000"
+      - "3000:3000"
     env_file:
       - .env.bff
     depends_on:
