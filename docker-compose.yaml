@@ -1,8 +1,8 @@
 services:
   react-app:
     build: ./ungs-docsys-front
-    #ports:
-     # - "5173:5173"
+    ports:
+     - "5173:5173"
     env_file:
       - ./ungs-docsys-front/.env
     depends_on:
