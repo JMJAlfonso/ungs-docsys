@@ -15,7 +15,9 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors({ origin: '*',								methods:'GET,HEAD,PUT,PATCH,POST,DELETE',					credentials:true, });
+  app.enableCors({ origin: '*',	                  
+                  methods:'GET,HEAD,PUT,PATCH,POST,DELETE',
+                  credentials:true, });
 
   app.useGlobalInterceptors(new HttpExceptionInterceptor());
   
