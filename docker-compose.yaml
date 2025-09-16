@@ -2,7 +2,7 @@ services:
   react-app:
     build: ./ungs-docsys-front
     ports:
-      - "8080:5173"
+      - "8081:5173"
     env_file:
       - ./ungs-docsys-front/.env
     depends_on:
@@ -13,7 +13,7 @@ services:
   nest-app:
     build: ./ungs-docsys-bff
     ports:
-      - "8081:3000"
+      - "8082:3000"
     env_file:
       - .env.bff
     depends_on:
