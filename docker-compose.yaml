@@ -1,14 +1,15 @@
 services:
-  react-app:
-    build: ./ungs-docsys-front
-    ports:
-      - "80:5173"
-    environment:
-      - VITE_DOCSYS_BFF_URL=http://nest-app:3000
-    depends_on:
-      - nest-app
-    networks:
-      - fullstack-net
+react-app:
+  build: ./ungs-docsys-front
+  ports:
+    - "5173:5173" # puerto externo de la VM
+  environment:
+    - VITE_DOCSYS_BFF_URL=http://170.210.55.87:3000 # usar la IP de la VM
+  command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"] # escuchar en todas las interfaces
+  depends_on:
+    - nest-app
+  networks:
+    - fullstack-net
 
   nest-app:
     build: ./ungs-docsys-bff
