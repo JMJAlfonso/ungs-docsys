@@ -24,7 +24,7 @@ services:
   springboot-app:
     build: ./ungs-docsys-ms
     ports:
-      - "8082:8080"
+      - "8080:8080"
     environment:
       - JWT_SECRET=255c9605d6e7089dd872607c63e6ea0b8388563201de43555939f4519b577f6edc73f2844e55d00a35eb6361c3d872e008795f1c7603e0075b0f23aacc1b9aba2278bdc03b2c7c32b19941728c34d8c1fef7bd373e8f5c86e225df5358f1af7649c95adb557cc97c8410a62b97f9d43bc51c7314fb4663554913b470978fa6d9aab1556dca71426c5f11b8385876db7b804eacafb2238410273d0e3f75cbaab6e12140662def1556a058f56f57d21dd28da1821193a13713c0d56c41ff92406617e1d2afbc23f5a88f8478df5fcf89f7138e75bd03d733d89cec0a660105f86397ee338ec500643aa2330539214fe07a06070ae0b2a061f27ae95a5e8a6c3a9a
       - URL_CONNECTION_DB=postgres-db
@@ -48,7 +48,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
       - ./ungs-docsys-db/initial-script.sql:/docker-entrypoint-initdb.d/initial-script.sql
     ports:
-      - "8083:5432"
+      - "5432:5432"
     networks:
       - fullstack-net
 
