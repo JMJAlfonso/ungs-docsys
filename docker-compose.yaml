@@ -3,8 +3,8 @@ services:
     build: ./ungs-docsys-front
     ports:
       - "8080:5173"
-    environment:
-      - VITE_DOCSYS_BFF_URL=http://170.210.55.87:3000
+    env_file:
+      - .env
     depends_on:
       - nest-app
     networks:
