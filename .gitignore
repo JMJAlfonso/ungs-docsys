@@ -6,6 +6,19 @@ ungs-docsys-front/dist
 ungs-docsys-front/dist-ssr
 ungs-docsys-front/*.local
 
+# spring-boot application properties
+ungs-docsys-ms/src/main/resources/application-dev.properties
+
+# Docker
+docker-compose.yaml
+
+# url variables de entorno
+ungs-docsys-front/.env
+ungs-docsys-bff/.env
+
+# puerto de escucha para local
+ungs-docsys-bff/src/main.ts
+
 # Logs
 ungs-docsys-bff/logs
 ungs-docsys-bff/*.log
