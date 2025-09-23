@@ -235,51 +235,53 @@ export default function SignUp() {
       {step === 3 && (
         <div>
           <h2>Ingresa tus datos de inicio de sesión</h2>
-          <div className="form-group">
-            <h3>Correo electrónico</h3>
-            <input
-              type="email"
-              placeholder="Ingresa tu correo electrónico"
-              {...register("email", {
-                required: "Campo obligatorio",
-                pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Correo inválido" },
-              })}
-            />
-            {errors.email && <p className="error-message">{errors.email.message}</p>}
-          </div>
+            <div className="form-inner">           
+              <div className="form-group">
+                <h3>Correo electrónico</h3>
+                <input
+                  type="email"
+                  placeholder="Ingresa tu correo electrónico"
+                  {...register("email", {
+                    required: "Campo obligatorio",
+                    pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Correo inválido" },
+                  })}
+                />
+                {errors.email && <p className="error-message">{errors.email.message}</p>}
+              </div>
 
-          <div className="form-group">
-            <h3>Contraseña</h3>
-            <input
-              type="password"
-              placeholder="Crea una contraseña"
-              {...register("password", {
-                required: "Campo obligatorio",
-                pattern: {
-                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/,
-                  message: "Debe tener 8 caracteres, letra, número y símbolo",
-                },
-              })}
-            />
-            {errors.password && <p className="error-message">{errors.password.message}</p>}
-          </div>
+              <div className="form-group">
+                <h3>Contraseña</h3>
+                <input
+                  type="password"
+                  placeholder="Crea una contraseña"
+                  {...register("password", {
+                    required: "Campo obligatorio",
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/,
+                      message: "Debe tener 8 caracteres, letra, número y símbolo",
+                    },
+                  })}
+                />
+                {errors.password && <p className="error-message">{errors.password.message}</p>}
+              </div>
 
-          <div className="form-group">
-            <h3>Repetir contraseña</h3>
-            <input
-              type="password"
-              placeholder="Repite tu contraseña"
-              {...register("confirmPassword", {
-                required: "Campo obligatorio",
-                validate: (value) => value === password || "Las contraseñas no coinciden",
-              })}
-            />
-            {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
-          </div>
+              <div className="form-group">
+                <h3>Repetir contraseña</h3>
+                <input
+                  type="password"
+                  placeholder="Repite tu contraseña"
+                  {...register("confirmPassword", {
+                    required: "Campo obligatorio",
+                    validate: (value) => value === password || "Las contraseñas no coinciden",
+                  })}
+                />
+                {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
+              </div>
 
-          <button type="submit" className="login-button">
-            Registrarme
-          </button>
+              <button type="submit" className="login-button">
+                Registrarme
+              </button>
+            </div>
         </div>
       )}
     </form>
