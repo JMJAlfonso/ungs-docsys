@@ -12,7 +12,7 @@ export default function SignUp() {
     register,
     handleSubmit,
     setValue,
-    control,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -76,57 +76,30 @@ export default function SignUp() {
     getAllNationalities();
     getAllIdentificationTypes();
   }, []);
-
-  const handleNext = () => {
-    if (step === 3) {
-      if (!isGestionarVacantes) {
-        navigate("/viewResume")
-      }
-      else {
-        navigate("/jobAppList");
-      }
-    } else {
-      setStep((prevStep) => prevStep + 1);
-    }
-  };
-  const handleBack = () => {
-    if (step === 1) {
-      navigate("/");
-    } else {
-      setStep((prevStep) => prevStep - 1);
-    }
-  };
+  
 
   const validateFecha = (value) => {
-    if (!value) {
-      return "La fecha es obligatoria.";
-    }
+    if (!value) return "La fecha es obligatoria.";
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(value)) return "Formato inválido (YYYY-MM-DD)";
+    const fechaIngresada = new Date(value);
+    if (isNaN(fechaIngresada.getTime())) return "Fecha inválida";
+    if (fechaIngresada > new Date()) return "La fecha no puede ser futura";
     return true;
   };
 
-  const handleRole = (roleId) => {
-    setValue("roleId", roleId);
-    setStep((prevStep) => prevStep + 1);
-  }
+  const password = watch("password");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form-container">
-      <button className="back-button" type="button" onClick={handleBack}>
+      <button className="back-button" type="button" onClick={() => setStep(step - 1)}>
         &lt; Volver
       </button>
       {step === 1 && (
         <div className="step-1-container">
           <h1>¿Con qué objetivo vas a registrarte?</h1>
           <div className="option-buttons-row">
-            <button
-              className="option-button"
-              type="button"
-              /*onClick={() => {
-                setIsGestionarVacantes(true);
-                handleNext();
-              }}*/
-              onClick={() => handleRole(1)}
-            >
+            <button type="button" className="option-button" onClick={() => setValue("roleId", 1) || setStep(2)}>
               Gestionar las vacantes de trabajo
             </button>
             <button
@@ -140,11 +113,8 @@ export default function SignUp() {
             >
               Buscar y postularte a vacantes de trabajo
             </button>
-            <input
-                className={errors.firstName ? "input-error" : ""}
-                type="hidden"
-                {...register("roleId", { required: "Campo obligatorio" })}
-              />
+            {errors.roleId && <p className="error-message">{errors.roleId.message}</p>}
+            <input type="hidden" {...register("roleId", { required: "Campo obligatorio" })} />
           </div>
         </div>
       )}
@@ -156,99 +126,115 @@ export default function SignUp() {
             <div className="form-group">
               <label>Nombre</label>
               <input
-                className={errors.firstName ? "input-error" : ""}
+                
                 type="text"
-                {...register("firstName", { required: "Campo obligatorio" })}
+                {...register("firstName", {
+                  required: "Campo obligatorio",
+                  pattern: { value: /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/, message: "Solo letras" },
+                })}
               />
+              {errors.firstName && <p className="error-message">{errors.firstName.message}</p>}
             </div>
 
             <div className="form-group">
               <label>Apellido</label>
-              <input
-                className={errors.lastName ? "input-error" : ""}
+              <input                
                 type="text"
-                {...register("lastName", { required: "Campo obligatorio" })}
+                {...register("lastName", {
+                  required: "Campo obligatorio",
+                  pattern: { value: /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/, message: "Solo letras" },
+                })}
               />
+              {errors.lastName && <p className="error-message">{errors.lastName.message}</p>}
             </div>
 
             <div className="form-group">
               <label>Tipo de Documento</label>
-              <select
-                className={errors.documentNumber ? "input-error" : ""}
-                {...register("identificationTypeId", { required: "Campo obligatorio" })}
-              >
-                <option key="000" value="0">
-                  {" "}
-                  Seleccione
-                </option>
-                {documentTypes.map((documentType) => (
-                  <option key={documentType.code} value={documentType.id}>
-                    {documentType.code}
+              <select {...register("identificationTypeId", { required: "Campo obligatorio" })}>
+                <option value="0">Seleccione</option>
+                {documentTypes.map((doc) => (
+                  <option key={doc.id} value={doc.id}>
+                    {doc.code}
                   </option>
                 ))}
               </select>
+              {errors.identificationTypeId && <p className="error-message">{errors.identificationTypeId.message}</p>}
             </div>
 
             <div className="form-group">
               <label>N° de Documento</label>
               <input
-                className={errors.identificationTypeId ? "input-error" : ""}
+                
                 type="text"
                 {...register("identificationNumber", {
                   required: "Campo obligatorio",
+                  pattern: { value: /^[0-9]{8}$/, // exactamente 8 dígitos
+                  message: "El DNI debe tener exactamente 8 números(completar con 0)" },
                 })}
               />
+              {errors.identificationNumber && <p className="error-message">{errors.identificationNumber.message}</p>}
             </div>
 
             <div className="form-group">
               <label>CUIL</label>
               <input
-                className={errors.cuil ? "input-error" : ""}
+               
                 type="text"
-                {...register("cuil", { required: "Campo obligatorio" })}
+                {...register("cuil", {
+                  required: "Campo obligatorio",
+                  pattern: { value: /^[0-9]{11}$/, message: "CUIL inválido (11 dígitos)" },
+                  validate: (value, formValues) => {
+                  const dni = formValues.identificationNumber;
+                  if (!dni || dni.length !== 8) return true;
+
+                  // extraer los 8 del medio del CUIL
+                  const dniEnCuil = value.substring(2, 10);
+                  if (dniEnCuil !== dni) {
+                    return "El CUIL no coincide con el DNI ingresado";
+                  }
+                  return true;
+                }
+                })}
               />
+              {errors.cuil && <p className="error-message">{errors.cuil.message}</p>}
             </div>
 
             <div className="form-group">
               <label>Teléfono</label>
-              <input
-                className={errors.phone ? "input-error" : ""}
+              <input                
                 type="tel"
-                {...register("phone", { required: "Campo obligatorio" })}
+                {...register("phone", {
+                  required: "Campo obligatorio",
+                  pattern: { value: /^[0-9]{8,15}$/, message: "Teléfono inválido" },
+                })}
               />
+              {errors.phone && <p className="error-message">{errors.phone.message}</p>}
             </div>
 
             <div className="form-group">
               <label>Fecha de nacimiento</label>
               <input
-                type="text"
-                className={errors.fecha ? "input-error" : ""}
-                {...register("birthDate", {
-                  required: "La fecha es obligatoria.",
-                  validate: validateFecha,
-                })}
+                type="text"                
+                
                 placeholder="YYYY-MM-DD"
                 value={fecha}
+                {...register("birthDate", { required: "Campo obligatorio", validate: validateFecha })}
                 onChange={(e) => setFecha(e.target.value)}
               />
+              {errors.birthDate && <p className="error-message">{errors.birthDate.message}</p>}
             </div>
 
             <div className="form-group">
               <label>Nacionalidad</label>
-              <select
-                className={errors.nationality ? "input-error" : ""}
-                {...register("nationalityId", { required: "Campo obligatorio" })}
-              >
-                <option key="000" value="0">
-                  {" "}
-                  Seleccione su nacionalidad
-                </option>
-                {nationalities.map((nationality) => (
-                  <option key={nationality.code} value={nationality.id}>
-                    {nationality.description}
+              <select {...register("nationalityId", { required: "Campo obligatorio" })}>
+                <option value="0">Seleccione su nacionalidad</option>
+                {nationalities.map((nat) => (
+                  <option key={nat.id} value={nat.id}>
+                    {nat.description}
                   </option>
                 ))}
               </select>
+              {errors.nationalityId && <p className="error-message">{errors.nationalityId.message}</p>}
             </div>
 
             <button className="next-button" type="submit">
@@ -265,34 +251,50 @@ export default function SignUp() {
             <div class="form-group">
               <h3>Correo electrónico</h3>
               <input
-                type="email"
-                placeholder="Ingresa tu correo electrónico"
-                {...register("email", { required: "Campo obligatorio" })}
-              ></input>
+              type="email"
+              placeholder="Ingresa tu correo electrónico"
+              {...register("email", {
+                required: "Campo obligatorio",
+                pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Correo inválido" },
+              })}
+            />
+            {errors.email && <p className="error-message">{errors.email.message}</p>}
               
             </div>
 
             <div class="form-group">
               <h3>Contraseña</h3>
-              <div class="password-requirements">
-                Deberá tener:
-                <ul>
-                  <li>Al menos 1 letra y un número</li>
-                  <li>Al menos 8 caracteres</li>
-                  <li>Al menos 1 caracter especial</li>
-                </ul>
-              </div>
-              <input type="password" placeholder="Crea una contraseña" {...register("password", { required: "Campo obligatorio" })}></input>
+              <input
+              type="password"
+              placeholder="Crea una contraseña"
+              {...register("password", {
+                required: "Campo obligatorio",
+                pattern: {
+                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/,
+                  message: "Debe tener 8 caracteres, letra, número y símbolo",
+                },
+              })}
+            />
+            {errors.password && <p className="error-message">{errors.password.message}</p>}
             </div>
 
             <div class="form-group">
               <h3>Repetir contraseña</h3>
-              <input type="password" placeholder="Repite tu contraseña"></input>
+              <input
+              type="password"
+              placeholder="Repite tu contraseña"
+              {...register("confirmPassword", {
+                required: "Campo obligatorio",
+                validate: (value) => value === password || "Las contraseñas no coinciden",
+              })}
+            />
+            {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
             </div>
 
             <button type="submit" className="login-button">
               Registrarme
             </button>
+            
           </div>
         </div>
       )}

@@ -90,7 +90,15 @@
 
   .input-error {
     border-color: red !important;
+    background-color: #ffe6e6;
   }
+  .error-message {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #d93025;
+  background: transparent;  
+  padding: 0;  
+}
 
   .form-error-general {
     color: red;
