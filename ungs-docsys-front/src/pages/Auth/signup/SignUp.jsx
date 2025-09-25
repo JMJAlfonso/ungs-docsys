@@ -41,7 +41,7 @@ export default function SignUp() {
         nationalityId: Number(data.nationalityId),
       };
       await SignUpService.signUp(signUpRequest);
-      window.location.href = "/";
+      navigate("/");
     } else {
       setStep((prevStep) => prevStep + 1);
     }
@@ -88,7 +88,17 @@ export default function SignUp() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form-container">
-      <button className="back-button" type="button" onClick={() => setStep(step - 1)}>
+      <button
+        className="back-button"
+        type="button"
+        onClick={() => {
+          if (step === 1) {
+            navigate("/"); // volver a la página de inicio
+          } else {
+            setStep(step - 1); // retrocede un paso
+          }
+        }}
+      >
         &lt; Volver
       </button>
 
