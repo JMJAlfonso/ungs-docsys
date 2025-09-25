@@ -24,11 +24,9 @@ export default function SignUp() {
   const [nationalities, setNationalities] = useState([]);
   const [documentTypes, setDocumentTypes] = useState([]);
   const [step, setStep] = useState(1);
-  const [isGestionarVacantes, setIsGestionarVacantes] = useState(null);
 
   const onNext = async (data) => {
-    console.log(JSON.stringify(data));
-    if(step === 3 ) {
+    if (step === 3) {
       const signUpRequest = {
         roleId: Number(data.roleId),
         email: data.email,
@@ -40,14 +38,13 @@ export default function SignUp() {
         cuilCuit: data.cuil,
         phone: data.phone,
         birthDate: data.birthDate,
-        nationalityId: Number(data.nationalityId)
-      }
+        nationalityId: Number(data.nationalityId),
+      };
       await SignUpService.signUp(signUpRequest);
       window.location.href = "/";
     } else {
       setStep((prevStep) => prevStep + 1);
     }
-    console.log(step);
   };
 
   const onSubmit = async (data) => {
@@ -71,12 +68,11 @@ export default function SignUp() {
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     getAllNationalities();
     getAllIdentificationTypes();
   }, []);
-  
 
   const validateFecha = (value) => {
     if (!value) return "La fecha es obligatoria.";
@@ -95,6 +91,8 @@ export default function SignUp() {
       <button className="back-button" type="button" onClick={() => setStep(step - 1)}>
         &lt; Volver
       </button>
+
+      {/* Paso 1 */}
       {step === 1 && (
         <div className="step-1-container">
           <h1>¿Con qué objetivo vas a registrarte?</h1>
@@ -102,15 +100,7 @@ export default function SignUp() {
             <button type="button" className="option-button" onClick={() => setValue("roleId", 1) || setStep(2)}>
               Gestionar las vacantes de trabajo
             </button>
-            <button
-              className="option-button"
-              type="button"
-             /* onClick={() => {
-                setIsGestionarVacantes(false);
-                handleNext();
-              }}*/
-              onClick={() => handleRole(2)}
-            >
+            <button type="button" className="option-button" onClick={() => setValue("roleId", 2) || setStep(2)}>
               Buscar y postularte a vacantes de trabajo
             </button>
             {errors.roleId && <p className="error-message">{errors.roleId.message}</p>}
@@ -119,6 +109,7 @@ export default function SignUp() {
         </div>
       )}
 
+      {/* Paso 2 */}
       {step === 2 && (
         <div>
           <h2>Ingresá tus datos personales</h2>
@@ -126,7 +117,6 @@ export default function SignUp() {
             <div className="form-group">
               <label>Nombre</label>
               <input
-                
                 type="text"
                 {...register("firstName", {
                   required: "Campo obligatorio",
@@ -138,7 +128,7 @@ export default function SignUp() {
 
             <div className="form-group">
               <label>Apellido</label>
-              <input                
+              <input
                 type="text"
                 {...register("lastName", {
                   required: "Campo obligatorio",
@@ -164,7 +154,6 @@ export default function SignUp() {
             <div className="form-group">
               <label>N° de Documento</label>
               <input
-                
                 type="text"
                 {...register("identificationNumber", {
                   required: "Campo obligatorio",
@@ -178,7 +167,6 @@ export default function SignUp() {
             <div className="form-group">
               <label>CUIL</label>
               <input
-               
                 type="text"
                 {...register("cuil", {
                   required: "Campo obligatorio",
@@ -201,7 +189,7 @@ export default function SignUp() {
 
             <div className="form-group">
               <label>Teléfono</label>
-              <input                
+              <input
                 type="tel"
                 {...register("phone", {
                   required: "Campo obligatorio",
@@ -214,8 +202,7 @@ export default function SignUp() {
             <div className="form-group">
               <label>Fecha de nacimiento</label>
               <input
-                type="text"                
-                
+                type="text"
                 placeholder="YYYY-MM-DD"
                 value={fecha}
                 {...register("birthDate", { required: "Campo obligatorio", validate: validateFecha })}
@@ -244,60 +231,60 @@ export default function SignUp() {
         </div>
       )}
 
+      {/* Paso 3 */}
       {step === 3 && (
         <div>
           <h2>Ingresa tus datos de inicio de sesión</h2>
-          <div class="container">
-            <div class="form-group">
-              <h3>Correo electrónico</h3>
-              <input
-              type="email"
-              placeholder="Ingresa tu correo electrónico"
-              {...register("email", {
-                required: "Campo obligatorio",
-                pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Correo inválido" },
-              })}
-            />
-            {errors.email && <p className="error-message">{errors.email.message}</p>}
-              
-            </div>
+            <div className="form-inner">           
+              <div className="form-group">
+                <h3>Correo electrónico</h3>
+                <input
+                  type="email"
+                  placeholder="Ingresa tu correo electrónico"
+                  {...register("email", {
+                    required: "Campo obligatorio",
+                    pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Correo inválido" },
+                  })}
+                />
+                {errors.email && <p className="error-message">{errors.email.message}</p>}
+              </div>
 
-            <div class="form-group">
-              <h3>Contraseña</h3>
-              <input
-              type="password"
-              placeholder="Crea una contraseña"
-              {...register("password", {
-                required: "Campo obligatorio",
-                pattern: {
-                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/,
-                  message: "Debe tener 8 caracteres, letra, número y símbolo",
-                },
-              })}
-            />
-            {errors.password && <p className="error-message">{errors.password.message}</p>}
-            </div>
+              <div className="form-group">
+                <h3>Contraseña</h3>
+                <input
+                  type="password"
+                  placeholder="Crea una contraseña"
+                  {...register("password", {
+                    required: "Campo obligatorio",
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,}$/,
+                      message: "Debe tener 8 caracteres, letra, número y símbolo",
+                    },
+                  })}
+                />
+                {errors.password && <p className="error-message">{errors.password.message}</p>}
+              </div>
 
-            <div class="form-group">
-              <h3>Repetir contraseña</h3>
-              <input
-              type="password"
-              placeholder="Repite tu contraseña"
-              {...register("confirmPassword", {
-                required: "Campo obligatorio",
-                validate: (value) => value === password || "Las contraseñas no coinciden",
-              })}
-            />
-            {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
-            </div>
+              <div className="form-group">
+                <h3>Repetir contraseña</h3>
+                <input
+                  type="password"
+                  placeholder="Repite tu contraseña"
+                  {...register("confirmPassword", {
+                    required: "Campo obligatorio",
+                    validate: (value) => value === password || "Las contraseñas no coinciden",
+                  })}
+                />
+                {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
+              </div>
 
-            <button type="submit" className="login-button">
-              Registrarme
-            </button>
-            
-          </div>
+              <button type="submit" className="login-button">
+                Registrarme
+              </button>
+            </div>
         </div>
       )}
     </form>
   );
 }
+
