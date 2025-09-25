@@ -8,7 +8,7 @@ COPY . .
 RUN npm run build
 
 # Etapa de producción
-FROM node:22.14.0 AS production
+FROM node:22.11.0 AS production
 
 WORKDIR /app
 RUN npm install -g serve
