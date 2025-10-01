@@ -244,7 +244,7 @@ export default function ResumeForm() {
                 <div className="resume-container">
                     <div className="resume-header">
                         <h2>Gestión de Curriculum</h2>
-                        <p>Agregue información a su curriculum manualmente, o bien cargando su CV en formato .PDF</p>
+                        <p>Agregue información a su curriculum.</p>
                     </div>
 
                     {userClaim?.roles?.includes('CANDIDATE') && (
@@ -265,10 +265,10 @@ export default function ResumeForm() {
                                     <EditDocumentIcon fontSize="large" />
                                     Editar
                                 </button>
-                                <button className="resume-button" type="submit">
+                                {/* <button className="resume-button" type="submit">
                                     <UploadFileIcon fontSize="large" />
                                     Cargar CV
-                                </button>
+                                </button> */}
                             </div>
                         )
                     )}
