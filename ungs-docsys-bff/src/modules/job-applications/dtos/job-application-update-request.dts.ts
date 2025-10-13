@@ -5,6 +5,7 @@ import {
   Max,
   IsNumber,
   IsString,
+  IsArray,
 } from 'class-validator';
 
 export class JobApplicationUpdateRequestDto {
@@ -23,6 +24,10 @@ export class JobApplicationUpdateRequestDto {
   @Min(1)
   jobApplicationPeriodId?: number;
 
+  @IsOptional()
+  @IsArray()
+  userApprovers?: Int16Array;
+  
   @IsOptional()
   @IsNumber()
   @Min(1)

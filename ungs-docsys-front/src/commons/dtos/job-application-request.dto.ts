@@ -4,6 +4,7 @@ export class JobApplicationRequestDto {
     title: string;
     description: string;
     jobApplicationPeriodId: number;
+    userApprovers: Int16Array[];
     minApprovers: number;
     reason: string;
     yearPeriod: number;

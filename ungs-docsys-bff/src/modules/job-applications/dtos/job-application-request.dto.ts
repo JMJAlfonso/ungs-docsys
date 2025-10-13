@@ -6,7 +6,9 @@ import {
     Min,
     Max,
     IsPositive,
-    IsOptional
+    IsOptional,
+    isArray,
+    IsArray
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { RequirementCreateRequestDto } from '../requirements/dtos/requirement-create-request.dto';
@@ -30,7 +32,11 @@ export class JobApplicationRequestDto {
     @IsNumber()
     @IsPositive({ message: 'Job Application Period ID must be a positive number' })
     jobApplicationPeriodId: number;
-  
+    
+    @ApiProperty()
+    @IsArray()
+    userApprovers: Int16Array;
+
     @ApiProperty()
     @IsNotEmpty({ message: 'Minimum Approvers is required' })
     @IsNumber()
