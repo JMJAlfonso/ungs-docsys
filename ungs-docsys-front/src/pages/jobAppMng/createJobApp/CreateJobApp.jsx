@@ -95,11 +95,12 @@ export default function CreateJobApp() {
     requirementTargetComparatorId: Number(requirement.requirementTargetComparatorId),
     operator: requirement.operator
   }));
-
+  
   const request = {
     title: data.title,
     description: data.description,
     jobApplicationPeriodId: Number(data.jobApplicationPeriodId),
+    userApprovers: data.getUserClaim.id,
     minApprovers: 2,
     reason: data.reason,
     yearPeriod: selectedYear,
