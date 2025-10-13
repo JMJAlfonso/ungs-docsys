@@ -50,32 +50,72 @@ export default function CreateJobApp() {
   };
 
   const handleSaveJobApplication = async (data) => {
-    const requirementsRequest = data.requirements.map(requirement => {
-      return {
-        description: requirement.description,
-        expectedValue: mapExpectedValueToJsonStringfy(requirement.expectedValue, requirement.expectedAgeValue),
-        requirementTypeId: Number(requirement.requirementTypeId),
-        requirementTargetComparatorId: Number(requirement.requirementTargetComparatorId),
-        operator: requirement.operator
-      }
-    })
-    const request = {
-      title: data.title,
-      description: data.description,
-      jobApplicationPeriodId: Number(data.jobApplicationPeriodId),
-      minApprovers: 2,
-      reason: data.reason,
-      yearPeriod: data.yearPeriod,
-      jobProfileLevelId: Number(data.jobProfileLevelId),
-      requirements: requirementsRequest
-    };
-    try {
-      await JobApplicationsService.create(request);
-      navigate("/jobAppList");
-    } catch (error) {
-      console.error(error);
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth() + 1; // enero = 0 → sumamos 1
+
+  const selectedYear = Number(data.yearPeriod);
+  const selectedPeriod = jobApplicationPeriods.find(p => p.id === Number(data.jobApplicationPeriodId));
+  const selectedSemester = selectedPeriod?.description?.toLowerCase() || ""; // ejemplo: "1er semestre", "2do semestre"
+
+  // 🔹 1. Si el año es anterior, pedir confirmación
+  if (selectedYear < currentYear ) {
+    const continuar = window.confirm(
+      `⚠️ Estás cargando una postulación para un período anterior al año actual (${selectedYear} < ${currentYear}).\n¿Deseás continuar igualmente?`
+    );
+    if (!continuar) {
+      alert("Operación cancelada por el usuario.");
+      return;
     }
+  }
+
+  // 🔹 2. Validar coherencia entre semestre y fecha actual
+  if (selectedYear === currentYear) {
+    const isSecondSemesterNow = currentMonth >= 7 && currentMonth <= 12;   
+
+    if (isSecondSemesterNow && selectedSemester.includes("1")) {
+       const continuar = window.confirm(
+      `⚠️ Estás cargando una postulación para un período anterior al semestre actual (${selectedSemester} < ${currentMonth}).\n¿Deseás continuar igualmente?`
+    );
+      if (!continuar) {
+        alert("Operación cancelada por el usuario.");
+        return;
+      }
+    }
+  }
+
+  // 🔹 3. Si pasa las validaciones, armamos el request
+  const requirementsRequest = data.requirements.map(requirement => ({
+    description: requirement.description,
+    expectedValue: mapExpectedValueToJsonStringfy(
+      requirement.expectedValue,
+      requirement.expectedAgeValue
+    ),
+    requirementTypeId: Number(requirement.requirementTypeId),
+    requirementTargetComparatorId: Number(requirement.requirementTargetComparatorId),
+    operator: requirement.operator
+  }));
+
+  const request = {
+    title: data.title,
+    description: data.description,
+    jobApplicationPeriodId: Number(data.jobApplicationPeriodId),
+    minApprovers: 2,
+    reason: data.reason,
+    yearPeriod: selectedYear,
+    jobProfileLevelId: Number(data.jobProfileLevelId),
+    requirements: requirementsRequest
   };
+
+  try {
+    await JobApplicationsService.create(request);
+    navigate("/jobAppList");
+  } catch (error) {
+    console.error(error);
+    alert("❌ Ocurrió un error al crear la postulación.");
+  }
+};
+
 
   const getUserClaim = () => {
     const claims = JwtService.getClaims();

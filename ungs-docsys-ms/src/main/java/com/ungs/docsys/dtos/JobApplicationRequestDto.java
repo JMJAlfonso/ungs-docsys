@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsExclude;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -25,6 +27,8 @@ public class JobApplicationRequestDto {
     @NotNull(message = "Job Application Period ID is required")
     @Positive(message = "Job Application Period ID must be a positive number")
     private Long jobApplicationPeriodId;
+    
+    private Integer[] usersApproval;
 
     @NotNull(message = "Minimum Approvers is required")
     @Min(value = 1, message = "Minimum Approvers must be at least one approver")

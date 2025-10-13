@@ -91,12 +91,46 @@ export default function ResumeForm() {
             console.error(error);
         }
     };
+        // 🔹 Validaciones de coherencia de fechas
+    const validateDateRanges = (data) => {
+    let errors = [];
 
-    const onSubmit = async (data) => {
-        const resumeSaved = await ResumesService.create(data);
-        reset(resumeSaved);
-        setIsEditing(false);
+    // Validar experiencias laborales
+    data.experiences?.forEach((exp, index) => {
+        if (exp.startDate && exp.endDate) {
+        const start = new Date(exp.startDate);
+        const end = new Date(exp.endDate);
+        if (end < start) {
+            errors.push(`La fecha de fin en la experiencia ${index + 1} no puede ser anterior a la fecha de inicio.`);
+        }
+        }
+    });
+
+    // Validar certificaciones
+    data.certifications?.forEach((cert, index) => {
+        if (cert.issueDate && cert.expirationDate) {
+        const issue = new Date(cert.issueDate);
+        const exp = new Date(cert.expirationDate);
+        if (exp < issue) {
+            errors.push(`La fecha de vencimiento del certificado ${index + 1} no puede ser anterior a su emisión.`);
+        }
+        }
+    });
+    return errors;
     };
+    
+    const onSubmit = async (data) => {
+    const errors = validateDateRanges(data);
+
+    if (errors.length > 0) {
+        alert(errors.join("\n")); //  usar un modal más elegante si se tiene otro
+        return;
+    }
+
+    const resumeSaved = await ResumesService.create(data);
+    reset(resumeSaved);
+    setIsEditing(false);
+};
 
     const handleCancel = async () => {
         fetchCurrentResumeByUser();

@@ -3,9 +3,12 @@ import {
   MaxLength,
   IsDateString,
   IsOptional,
-  IsBoolean
+  IsBoolean,
+  Validate
 } from 'class-validator';
-
+import { Type } from 'class-transformer';
+import { ExperienceDateRangeValidator } from '../validators/experience-date-range.validator';
+import { ApiProperty } from '@nestjs/swagger';
 export class ExperienceRequestDto {
   @IsOptional()
   @IsString()
@@ -25,10 +28,14 @@ export class ExperienceRequestDto {
   @IsOptional()
   @IsDateString({}, { message: 'Start date must be a valid ISO 8601 date string' })
   startDate?: string;
-
+  
+  @ApiProperty({ example: '2022-01-01', required: false})
   @IsOptional()
   @IsDateString({}, { message: 'End date must be a valid ISO 8601 date string' })
   endDate?: string;
+
+  @Validate(ExperienceDateRangeValidator)
+  dateValidation: boolean;
 
   @IsOptional()
   @IsBoolean({ message: 'isCurrentJob must be a boolean value' })

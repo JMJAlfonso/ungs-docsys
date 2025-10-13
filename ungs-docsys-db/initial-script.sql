@@ -281,6 +281,7 @@ CREATE TABLE recruitment.job_application (
     description character varying(5000) NOT NULL,
     job_application_status_id bigint NOT NULL,
     job_application_period_id bigint NOT NULL,
+    user_approvers INTEGER[],
     min_approvers bigint,
     reason character varying(500) NOT NULL,
     year_period bigint NOT NULL,

@@ -20,4 +20,6 @@ public class AppUserClaimDto {
     private NationalityResponseDto nationality;
     private List<String> roles;
     private List<String> permissions;
+   
 }
+

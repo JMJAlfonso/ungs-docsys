@@ -80,8 +80,11 @@ export default function ViewJobApp() {
     try {
       const jobApplicationApprovalsResponse = await JobApplicationApprovalService.getByParams(Number(id));
       const approvedCount = jobApplicationApprovalsResponse.filter(item => item.approved === true);
+      const approvedUser = jobApplicationApprovalsResponse.filter(item => item.usersApproval.includes(userClaim?.id));
       const hasRejected = jobApplicationApprovalsResponse.some(item => item.approved === false);
-      setShowPublishButton(approvedCount.length >= 2 && !hasRejected);
+      setShowPublishButton(approvedCount.length >= 2 && !hasRejected && !approvedUser);
+      if (approvedUser)
+        showToast("Ya has votado", "error")
     } catch (error) {
       console.error(error);
     }

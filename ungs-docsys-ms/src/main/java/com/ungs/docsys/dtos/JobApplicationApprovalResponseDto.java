@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class JobApplicationApprovalResponseDto {
     private Long id;
     private JobApplicationResponseDto jobApplication;
+    private Integer[] usersApproval;
     private Boolean approved;
     private String reason;
     private AppUserResponseDto appUser;
