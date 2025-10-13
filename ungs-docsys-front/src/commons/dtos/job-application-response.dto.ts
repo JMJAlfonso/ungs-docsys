@@ -21,4 +21,5 @@ export class JobApplicationResponseDto {
   updatedDate: Date;
   requirements: RequirementResponseDto[];
   jobProfileLevel: JobProfileLevelResponseDto;
+  
 }

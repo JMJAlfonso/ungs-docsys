@@ -100,7 +100,7 @@ export default function CreateJobApp() {
     title: data.title,
     description: data.description,
     jobApplicationPeriodId: Number(data.jobApplicationPeriodId),
-    userApprovers: data.getUserClaim.id,
+    userApprovers:  JwtService.getClaims().id,
     minApprovers: 2,
     reason: data.reason,
     yearPeriod: selectedYear,
