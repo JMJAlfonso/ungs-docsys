@@ -100,7 +100,7 @@ export default function CreateJobApp() {
     title: data.title,
     description: data.description,
     jobApplicationPeriodId: Number(data.jobApplicationPeriodId),
-    userApprovers:  JwtService.getClaims().id,
+    userApprovers:  [JwtService.getClaims().id],
     minApprovers: 2,
     reason: data.reason,
     yearPeriod: selectedYear,
@@ -113,7 +113,7 @@ export default function CreateJobApp() {
     navigate("/jobAppList");
   } catch (error) {
     console.error(error);
-    alert("❌ Ocurrió un error al crear la postulación.");
+    alert(`❌ Ocurrió un error al crear la postulación.${[JwtService.getClaims().id]}`);
   }
 };
 
@@ -176,8 +176,8 @@ export default function CreateJobApp() {
 
   return (
     <div className="home-container">
+      user={getUserClaim()}
       <Header
-        user={getUserClaim()}
       />
 
       <div className="app-container">
