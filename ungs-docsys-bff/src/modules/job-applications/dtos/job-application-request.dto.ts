@@ -35,7 +35,7 @@ export class JobApplicationRequestDto {
     
     @ApiProperty()
     @IsArray()
-    userApprovers: Int16Array;
+    userApprovers: number[];
 
     @ApiProperty()
     @IsNotEmpty({ message: 'Minimum Approvers is required' })

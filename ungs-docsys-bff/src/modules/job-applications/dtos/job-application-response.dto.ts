@@ -11,7 +11,7 @@ export class JobApplicationResponseDto {
   description: string;
   jobApplicationStatus: JobApplicationStatusResponseDto;
   jobApplicationPeriod: JobApplicationPeriodResponseDto;
-  userApprovers: Int16Array;
+  userApprovers: number[];
   minApprovers: number;
   reason: string;
   yearPeriod: number;
