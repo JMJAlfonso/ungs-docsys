@@ -113,7 +113,7 @@ export default function CreateJobApp() {
     navigate("/jobAppList");
   } catch (error) {
     console.error(error);
-    alert(`❌ Ocurrió un error al crear la postulación.${[JwtService.getClaims().id]}`);
+    alert("❌ Ocurrió un error al crear la postulación. "+`${JwtService.getClaims().id}`);
   }
 };
 
