@@ -101,7 +101,7 @@ export default function CreateJobApp() {
     title: data.title,
     description: data.description,
     jobApplicationPeriodId: Number(data.jobApplicationPeriodId),
-    userApprovers:  [AppUserClaimDto.id],
+    userApprovers:  null,
     minApprovers: 2,
     reason: data.reason,
     yearPeriod: selectedYear,
