@@ -21,7 +21,7 @@ public class JobApplicationApproval {
     private Boolean approved;
     @Column(nullable = false, length = 500)
     private String reason;
-    @Column(name="user_approvers")
+    @Column(name="users_approvers", nullable = true)
     private Integer[] usersApprovers;
     @ManyToOne
     @JoinColumn(name = "user_id_approval", nullable = false)

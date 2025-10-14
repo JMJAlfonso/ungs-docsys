@@ -37,8 +37,9 @@ export default function ViewJobApp() {
     }
   }
 
-  const handleApproval = (decision) => {         
-    if(!jobApplicationApprovalsResponse.includes(userClaim?.id)) {
+  const handleApproval = (decision) => { 
+    const hasVote = await JobApplicationsService.getById(Number(id)).usersApprovers.includes(userClaim?.id)        
+    if(!hasVote) {
         setApprovalDecision(decision);
         setIsModalOpen(true)
       } else {       
