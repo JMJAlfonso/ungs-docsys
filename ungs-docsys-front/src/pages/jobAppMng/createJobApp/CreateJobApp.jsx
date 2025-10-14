@@ -11,6 +11,7 @@ import { RequirementTargetComparatorsService } from "../../../commons/services/r
 import { RequirementTypesService } from "../../../commons/services/requirement-types.service";
 import { JobApplicationsService } from "../../../commons/services/job-applications.service";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { AppUserClaimDto } from "../../../commons/dtos/user-claim.dto";
 
 export default function CreateJobApp() {
   const {
@@ -100,7 +101,7 @@ export default function CreateJobApp() {
     title: data.title,
     description: data.description,
     jobApplicationPeriodId: Number(data.jobApplicationPeriodId),
-    userApprovers:  [JwtService.getClaims().id],
+    userApprovers:  [AppUserClaimDto.id],
     minApprovers: 2,
     reason: data.reason,
     yearPeriod: selectedYear,
@@ -112,8 +113,7 @@ export default function CreateJobApp() {
     await JobApplicationsService.create(request);
     navigate("/jobAppList");
   } catch (error) {
-    console.error(error);
-    console.log([JwtService.getClaims().id]);
+    console.error(error);    
     alert("❌ Ocurrió un error al crear la postulación.");
   }
 };
