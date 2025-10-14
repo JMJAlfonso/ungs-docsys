@@ -3,7 +3,8 @@ import { JobApplicationResponseDto } from "./job-application-response.dto";
 
 export class JobApplicationApprovalResponseDto {
     id: number;
-    jobApplication: JobApplicationResponseDto;    
+    jobApplication: JobApplicationResponseDto;
+    usersApprovers : number[];    
     approved: boolean;
     reason: string;
     appUser: AppUserExtendedResponseDto;

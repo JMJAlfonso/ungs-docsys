@@ -35,8 +35,8 @@ public class JobApplication {
     @ManyToOne
     @JoinColumn(name = "job_application_period_id", nullable = false)
     private JobApplicationPeriod jobApplicationPeriod;
-    @Column(name="user_approvers", nullable = true)
-    private Integer[] usersApproval;
+    @Column(name="user_approvers")
+    private Integer[] usersApprovers;
     @Column(name="min_approvers", nullable = true)
     private Long minApprovers;
     @Column(nullable = false, length = 500)

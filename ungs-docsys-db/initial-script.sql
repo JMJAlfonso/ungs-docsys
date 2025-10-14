@@ -303,6 +303,7 @@ ALTER TABLE recruitment.job_application OWNER TO admin;
 CREATE TABLE recruitment.job_application_approval (
     id bigint NOT NULL,
     job_application_id bigint NOT NULL,
+    user_approvers double precision[],
     approved boolean,
     reason character varying(500) NOT NULL,
     user_id_approval bigint NOT NULL,

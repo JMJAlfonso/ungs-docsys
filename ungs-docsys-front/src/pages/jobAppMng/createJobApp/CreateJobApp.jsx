@@ -11,7 +11,6 @@ import { RequirementTargetComparatorsService } from "../../../commons/services/r
 import { RequirementTypesService } from "../../../commons/services/requirement-types.service";
 import { JobApplicationsService } from "../../../commons/services/job-applications.service";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { AppUserClaimDto } from "../../../commons/dtos/user-claim.dto";
 
 export default function CreateJobApp() {
   const {
@@ -100,8 +99,7 @@ export default function CreateJobApp() {
   const request = {
     title: data.title,
     description: data.description,
-    jobApplicationPeriodId: Number(data.jobApplicationPeriodId),
-    userApprovers:  null,
+    jobApplicationPeriodId: Number(data.jobApplicationPeriodId),   
     minApprovers: 2,
     reason: data.reason,
     yearPeriod: selectedYear,

@@ -37,15 +37,20 @@ export default function ViewJobApp() {
     }
   }
 
-  const handleApproval = (decision) => {
-    setApprovalDecision(decision);
-    setIsModalOpen(true);
+  const handleApproval = (decision) => {         
+    if(!jobApplicationApprovalsResponse.includes(userClaim?.id)) {
+        setApprovalDecision(decision);
+        setIsModalOpen(true)
+      } else {       
+        showToast("Ya has votado", "warning");
+      }    
   };
 
   const handleConfirm = async () => {
     try {
       const jobApplicationApprovalRequest = {
         jobApplicationId: Number(id),
+        usersApprovers: [userClaim?.id],
         approved: approvalDecision,
         reason: reason
       };
@@ -80,7 +85,7 @@ export default function ViewJobApp() {
     try {
       const jobApplicationApprovalsResponse = await JobApplicationApprovalService.getByParams(Number(id));
       const approvedCount = jobApplicationApprovalsResponse.filter(item => item.approved === true);
-      const approvedUser = jobApplicationApprovalsResponse.filter(item => item.usersApproval.includes(userClaim?.id));
+      const approvedUser = jobApplicationApprovalsResponse.includes(userClaim?.id);
       const hasRejected = jobApplicationApprovalsResponse.some(item => item.approved === false);
       setShowPublishButton(approvedCount.length >= 2 && !hasRejected && !approvedUser);
       if (approvedUser)
