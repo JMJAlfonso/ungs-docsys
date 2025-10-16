@@ -33,6 +33,9 @@ CREATE TABLE recruitment.app_user (
 
 ALTER TABLE recruitment.app_user OWNER TO admin;
 
+
+INSERT INTO recruitment.app_user (id,email, password_hash, active,created_date, updated_date)
+VALUES ('admin@docsys.com', 'admin123', 'true','2025/10/16','2025/10/16');
 --
 -- TOC entry 220 (class 1259 OID 16416)
 -- Name: app_user_id_seq; Type: SEQUENCE; Schema: recruitment; Owner: admin
@@ -280,8 +283,7 @@ CREATE TABLE recruitment.job_application (
     title character varying(150) NOT NULL,
     description character varying(5000) NOT NULL,
     job_application_status_id bigint NOT NULL,
-    job_application_period_id bigint NOT NULL,
-    users_approvers double precision[],
+    job_application_period_id bigint NOT NULL,   
     min_approvers bigint,
     reason character varying(500) NOT NULL,
     year_period bigint NOT NULL,
@@ -302,8 +304,7 @@ ALTER TABLE recruitment.job_application OWNER TO admin;
 
 CREATE TABLE recruitment.job_application_approval (
     id bigint NOT NULL,
-    job_application_id bigint NOT NULL,
-    users_approvers double precision[],
+    job_application_id bigint NOT NULL,    
     approved boolean,
     reason character varying(500) NOT NULL,
     user_id_approval bigint NOT NULL,
@@ -970,6 +971,8 @@ CREATE TABLE recruitment.role (
     description character varying(255) NOT NULL
 );
 
+INSERT INTO recruitment.role (id, name, description) 
+            VALUES ('ADMIN','administrador de Docsys');
 
 ALTER TABLE recruitment.role OWNER TO admin;
 

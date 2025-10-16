@@ -31,11 +31,7 @@ export class JobApplicationRequestDto {
     @IsNotEmpty({ message: 'Job Application Period ID is required' })
     @IsNumber()
     @IsPositive({ message: 'Job Application Period ID must be a positive number' })
-    jobApplicationPeriodId: number;
-    
-    @ApiProperty()
-    @IsArray()
-    userApprovers: number[];
+    jobApplicationPeriodId: number;    
 
     @ApiProperty()
     @IsNotEmpty({ message: 'Minimum Approvers is required' })
