@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm, useFieldArray } from "react-hook-form";
 import Header from "../../../components/UI/Header";
-import './create-job-app.css';
+import './edit-job-app.css';
 import "../../../assets/styles/Home.css";
 import { JwtService } from "../../../commons/utils/jwt.service";
 import { JobProfileLevelsService } from "../../../commons/services/job-profile-levels.service";
@@ -11,14 +11,20 @@ import { RequirementTargetComparatorsService } from "../../../commons/services/r
 import { RequirementTypesService } from "../../../commons/services/requirement-types.service";
 import { JobApplicationsService } from "../../../commons/services/job-applications.service";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useLocation } from "react-router-dom";
 
-export default function CreateJobApp() {
+export default function EditJobApp() {
   const {
     register,
     handleSubmit,
     control,
+    setValue
   } = useForm();
   const navigate = useNavigate();
+  const location = useLocation();
+  const existingJobApp = location.state?.jobApplication || null; // viene del navigate()
+  const isEditing = !!existingJobApp;
+
   const [jobProfileLevels, setJobProfileLevels] = useState([]);
   const [jobApplicationPeriods, setJobApplicationPeriods] = useState([]);
   const [requirementTypes, setRequirementTypes] = useState([]);
@@ -52,39 +58,29 @@ export default function CreateJobApp() {
   const handleSaveJobApplication = async (data) => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1; // enero = 0 → sumamos 1
+  const currentMonth = currentDate.getMonth() + 1;
 
   const selectedYear = Number(data.yearPeriod);
   const selectedPeriod = jobApplicationPeriods.find(p => p.id === Number(data.jobApplicationPeriodId));
-  const selectedSemester = selectedPeriod?.description?.toLowerCase() || ""; // ejemplo: "1er semestre", "2do semestre"
+  const selectedSemester = selectedPeriod?.description?.toLowerCase() || "";
 
-  // 🔹 1. Si el año es anterior, pedir confirmación
-  if (selectedYear < currentYear ) {
+  if (selectedYear < currentYear) {
     const continuar = window.confirm(
       `⚠️ Estás cargando una postulación para un período anterior al año actual (${selectedYear} < ${currentYear}).\n¿Deseás continuar igualmente?`
     );
-    if (!continuar) {
-      alert("Operación cancelada por el usuario.");
-      return;
-    }
+    if (!continuar) return;
   }
 
-  // 🔹 2. Validar coherencia entre semestre y fecha actual
   if (selectedYear === currentYear) {
-    const isSecondSemesterNow = currentMonth >= 7 && currentMonth <= 12;   
-
+    const isSecondSemesterNow = currentMonth >= 7 && currentMonth <= 12;
     if (isSecondSemesterNow && selectedSemester.includes("1")) {
-       const continuar = window.confirm(
-      `⚠️ Estás cargando una postulación para un período anterior al semestre actual (${selectedSemester} < ${currentMonth}).\n¿Deseás continuar igualmente?`
-    );
-      if (!continuar) {
-        alert("Operación cancelada por el usuario.");
-        return;
-      }
+      const continuar = window.confirm(
+        `⚠️ Estás cargando una postulación para un período anterior al semestre actual (${selectedSemester}).\n¿Deseás continuar igualmente?`
+      );
+      if (!continuar) return;
     }
   }
 
-  // 🔹 3. Si pasa las validaciones, armamos el request
   const requirementsRequest = data.requirements.map(requirement => ({
     description: requirement.description,
     expectedValue: mapExpectedValueToJsonStringfy(
@@ -95,11 +91,11 @@ export default function CreateJobApp() {
     requirementTargetComparatorId: Number(requirement.requirementTargetComparatorId),
     operator: requirement.operator
   }));
-  
+
   const request = {
     title: data.title,
     description: data.description,
-    jobApplicationPeriodId: Number(data.jobApplicationPeriodId),   
+    jobApplicationPeriodId: Number(data.jobApplicationPeriodId),
     minApprovers: 2,
     reason: data.reason,
     yearPeriod: selectedYear,
@@ -108,13 +104,20 @@ export default function CreateJobApp() {
   };
 
   try {
-    await JobApplicationsService.create(request);
+    if (isEditing && existingJobApp?.id) {
+      await JobApplicationsService.partiallyUpdate(request, existingJobApp.id);
+      alert("✅ Postulación actualizada correctamente.");
+    } else {
+      await JobApplicationsService.create(request);
+      alert("✅ Postulación creada correctamente.");
+    }
     navigate("/jobAppList");
   } catch (error) {
-    console.error(error);    
-    alert("❌ Ocurrió un error al crear la postulación.");
+    console.error(error);
+    alert("❌ Ocurrió un error al guardar la postulación.");
   }
 };
+
 
 
   const getUserClaim = () => {
@@ -172,6 +175,30 @@ export default function CreateJobApp() {
     fetchRequirementTargetComparators();
     fetchRequirementTypes();
   }, []);
+  useEffect(() => {
+  if (existingJobApp) {
+    // Precargar los valores en el formulario
+    setValue("title", existingJobApp.title);
+    setValue("description", existingJobApp.description);
+    setValue("reason", existingJobApp.reason);
+    setValue("yearPeriod", existingJobApp.yearPeriod);
+    setValue("jobProfileLevelId", existingJobApp.jobProfileLevel?.id || "");
+    setValue("jobApplicationPeriodId", existingJobApp.jobApplicationPeriod?.id || "");
+
+    // Si hay requerimientos asociados, los precargamos
+    if (existingJobApp.requirements && existingJobApp.requirements.length > 0) {
+      const mappedReqs = existingJobApp.requirements.map(req => ({
+        description: req.description,
+        expectedValue: req.expectedValue,
+        expectedAgeValue: JSON.parse(req.expectedValue)?.numericValue || "",
+        requirementTypeId: req.requirementType?.id || "",
+        requirementTargetComparatorId: req.requirementTargetComparator?.id || "",
+        operator: req.operator || ""
+      }));
+      mappedReqs.forEach(req => appendRequirements(req));
+    }
+  }
+}, [existingJobApp]);
 
   return (
     <div className="home-container">      
@@ -341,7 +368,7 @@ export default function CreateJobApp() {
               type="submit"
               className="create-button"
             >
-              Crear postulación
+              {isEditing ? "Actualizar postulación" : "Crear postulación"}
             </button>
           </div>
 

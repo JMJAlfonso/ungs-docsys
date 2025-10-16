@@ -38,13 +38,9 @@ export default function ViewJobApp() {
   }
 
   const handleApproval = (decision) => { 
-    const hasVote = await JobApplicationsService.getById(Number(id)).usersApprovers.includes(userClaim?.id)        
-    if(!hasVote) {
+    
         setApprovalDecision(decision);
-        setIsModalOpen(true)
-      } else {       
-        showToast("Ya has votado", "warning");
-      }    
+        setIsModalOpen(true)         
   };
 
   const handleConfirm = async () => {
@@ -86,11 +82,8 @@ export default function ViewJobApp() {
     try {
       const jobApplicationApprovalsResponse = await JobApplicationApprovalService.getByParams(Number(id));
       const approvedCount = jobApplicationApprovalsResponse.filter(item => item.approved === true);
-      const approvedUser = jobApplicationApprovalsResponse.includes(userClaim?.id);
       const hasRejected = jobApplicationApprovalsResponse.some(item => item.approved === false);
-      setShowPublishButton(approvedCount.length >= 2 && !hasRejected && !approvedUser);
-      if (approvedUser)
-        showToast("Ya has votado", "error")
+      setShowPublishButton(approvedCount.length >= 2 && !hasRejected && !approvedUser);      
     } catch (error) {
       console.error(error);
     }
@@ -144,6 +137,16 @@ export default function ViewJobApp() {
       showToast(error.message, "error");
     }
   };
+  const editJobApplication = async () => {
+      // Solo puede editar si el usuario actual es el creador
+    if (toString.userClaim?.id === toString.jobApplication?.userIdCreator) {
+      // navigate(`/editJobApp/${jobApplication.id}`, {
+      // state: { jobApplication } // pasamos los datos al formulario
+      // });
+    } else {
+      showToast("Solo el creador puede editar esta propuesta", "warning");
+    }
+  }
 
   const goToCandidateList = () => {
     navigate(`/job-application-resume-managment/${jobApplication.id}`);
@@ -192,7 +195,7 @@ export default function ViewJobApp() {
               </button>
             ) : null}
 
-            <button className="managment-button-format edit-button">
+            <button className="managment-button-format edit-button" onClick={() => editJobApplication()}>
               Editar
             </button>
           </div>) : (

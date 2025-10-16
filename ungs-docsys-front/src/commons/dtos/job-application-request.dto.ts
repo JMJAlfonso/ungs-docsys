@@ -3,8 +3,7 @@ import { RequirementRequestDto } from "./requirement-request.dto";
 export class JobApplicationRequestDto {
     title: string;
     description: string;
-    jobApplicationPeriodId: number;
-    userApprovers: number[];
+    jobApplicationPeriodId: number;   
     minApprovers: number;
     reason: string;
     yearPeriod: number;

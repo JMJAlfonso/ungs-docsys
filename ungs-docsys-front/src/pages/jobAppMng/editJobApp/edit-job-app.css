@@ -1,0 +1,74 @@
+.requirement-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap; /* opcional si querés que se acomode en pantallas chicas */
+}
+
+.requirement-row input,
+.requirement-row select {
+  flex: 1;
+  min-width: 90px; /* opcional para mantener tamaño decente */
+}
+
+.remove-button {
+    padding: 0.75rem 1.5rem;
+    background: rgb(253, 105, 105);
+    color: #333;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.remove-button:hover {
+    background: #f38c8c;
+  }
+
+.go-back-button {
+    display: flex; /* Flexbox para alinear */
+    align-items: center; /* Centra verticalmente */
+    justify-content: center; /* Centra horizontalmente si querés */
+    gap: 8px; /* Espacio entre el ícono y el texto */
+    border: 2px solid #003366; /* Color y grosor del borde */
+    border-radius: 25px; /* Bordes redondeados */
+    padding: 8px 16px; /* Espaciado interno */
+    background-color: transparent; /* O color de fondo deseado */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    font-weight: bold; /* Texto más marcado */
+    margin-bottom: 20px;
+}
+
+.add-requirement-button {
+  background-color: #1976d2!important;
+  color: white!important;
+}
+
+.delete-requirement-button {
+  background-color: #f02c2c!important;
+  color: white!important;
+}
+
+.year-period {
+  width: 20%!important;
+}
+
+.job-form-row {
+  display: flex;            /* Activa Flexbox */
+  align-items: center;      /* Centra verticalmente */
+  margin-bottom: 16px;      /* Separación entre filas (opcional) */
+}
+
+.requirement-section {
+  width: 100%;
+}
+
+.column {
+    flex: 1;
+}
+
+.column-justify {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
