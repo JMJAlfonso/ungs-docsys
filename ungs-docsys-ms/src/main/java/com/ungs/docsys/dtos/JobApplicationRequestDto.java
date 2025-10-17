@@ -26,9 +26,8 @@ public class JobApplicationRequestDto {
 
     @NotNull(message = "Job Application Period ID is required")
     @Positive(message = "Job Application Period ID must be a positive number")
-    private Long jobApplicationPeriodId;
+    private Long jobApplicationPeriodId;  
     
-    private double[] usersApprovers;
 
     @NotNull(message = "Minimum Approvers is required")
     @Min(value = 1, message = "Minimum Approvers must be at least one approver")

@@ -22,11 +22,7 @@ export class JobApplicationUpdateRequestDto {
   @IsOptional()
   @IsNumber()
   @Min(1)
-  jobApplicationPeriodId?: number;
-
-  @IsOptional()
-  @IsArray()
-  userApprovers?: Int16Array;
+  jobApplicationPeriodId?: number;  
   
   @IsOptional()
   @IsNumber()

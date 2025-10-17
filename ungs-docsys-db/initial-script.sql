@@ -281,7 +281,6 @@ CREATE TABLE recruitment.job_application (
     description character varying(5000) NOT NULL,
     job_application_status_id bigint NOT NULL,
     job_application_period_id bigint NOT NULL,
-    users_approvers double precision[],
     min_approvers bigint,
     reason character varying(500) NOT NULL,
     year_period bigint NOT NULL,
@@ -303,7 +302,6 @@ ALTER TABLE recruitment.job_application OWNER TO admin;
 CREATE TABLE recruitment.job_application_approval (
     id bigint NOT NULL,
     job_application_id bigint NOT NULL,
-    users_approvers double precision[],
     approved boolean,
     reason character varying(500) NOT NULL,
     user_id_approval bigint NOT NULL,
