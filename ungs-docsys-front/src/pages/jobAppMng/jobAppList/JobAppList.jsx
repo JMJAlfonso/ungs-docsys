@@ -145,6 +145,11 @@ export default function JobAppList() {
     <div className="home-container">
       <Header
         user={getUserClaim()}
+        {...user?.role === "ADMIN" && (
+        <Link to="/users" className="menu-item">
+          Usuarios
+        </Link>
+        )}
       />
       <Navbar />
 

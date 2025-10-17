@@ -27,7 +27,7 @@ const Header = ({ user = { name: "Doe, John", role: "Reclutador" }, navItems = [
     <header className="header">
       <div className="header-top">
         <img
-          src="/src/assets/media/logodocsys.jpg"
+          src="../assets/media/logodocsys.jpg"
           alt="docSYS Logo"
           className="logo"
           style={{ cursor: 'pointer' }}
