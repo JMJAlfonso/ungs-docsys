@@ -14,7 +14,8 @@ public class JobApplicationResponseDto {
     private String title;
     private String description;
     private JobApplicationStatusResponseDto jobApplicationStatus;
-    private JobApplicationPeriodResponseDto jobApplicationPeriod;    
+    private JobApplicationPeriodResponseDto jobApplicationPeriod;
+    private double[] userApprovers;
     private Long minApprovers;
     private String reason;
     private Long yearPeriod;
