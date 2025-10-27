@@ -16,10 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-import com.ungs.docsys.models.AppUser;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -46,24 +42,5 @@ public class AppUserServiceImpl implements AppUserService {
         return appUserRepository.findAppUserByEmailAndActiveIsTrue(username)
                 .map(appUserMapper::toResponse)
                 .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "User not found"));
-    }
-
-    @Override
-    public List<AppUserResponseDto> getAllUsers() {
-        return appUserRepository.findAll()
-                .stream()
-                .map(this::mapToResponseDto)
-                .collect(Collectors.toList());
-    }
-
-    private AppUserResponseDto mapToResponseDto(AppUser user) {
-        AppUserResponseDto dto = new AppUserResponseDto();
-        dto.setId(user.getId());
-        dto.setEmail(user.getEmail());
-        dto.setActive(user.getActive());
-        dto.setCreatedDate(user.getCreatedDate());
-        dto.setUpdatedDate(user.getUpdatedDate());
-
-        return dto;
     }
 }

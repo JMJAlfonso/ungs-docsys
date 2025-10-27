@@ -7,12 +7,6 @@ import { JobApplicationsService } from '../../../commons/services/job-applicatio
 import Navbar from '../../../components/UI/Navbar';
 
 export default function JobAppList() {
-
-  const PENDING_STATUS_ID = 1;
-  const APPROVED_STATUS_ID = 2;
-  const PUBLISHED_STATUS_ID = 3;
-  const DECLINED_STATUS_ID = 4;
-
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     keywords: "",
@@ -95,14 +89,12 @@ export default function JobAppList() {
       return (
         <>
           <div className="applications-list">
-            {jobApplications
-              .filter(jobApplication => jobApplication.jobApplicationStatus.id === PUBLISHED_STATUS_ID)
-              .map(jobApplication => (
-                <div key={jobApplication.id} className="application-card" onClick={() => navigate(`/viewJobApp/${jobApplication.id}`)}>
-                  <h3>{`Cargo: ${jobApplication.jobProfileLevel?.description}`}</h3>
-                  <h2>{jobApplication.title}</h2>
-                  <p>{`Periodo: ${jobApplication.jobApplicationPeriod?.description} ${jobApplication.yearPeriod}`}</p>
-                </div>
+            {jobApplications.map(jobApplication => (
+              <div key={jobApplication.id} className="application-card" onClick={() => navigate(`/viewJobApp/${jobApplication.id}`)}>
+                <h3>{`Cargo: ${jobApplication.jobProfileLevel?.description}`}</h3>
+                <h2>{jobApplication.title}</h2>
+                <p>{`Periodo: ${jobApplication.jobApplicationPeriod?.description} ${jobApplication.yearPeriod}`}</p>
+              </div>
             ))}
           </div>
         </>
@@ -126,25 +118,8 @@ export default function JobAppList() {
         </>
       );
     }
-    if (userClaim?.roles?.includes('ADMIN')) {
-      return (
-        <>
-          <div className="applications-list">
-            {jobApplications.map(jobApplication => (
-              <div key={jobApplication.id} className="application-card" onClick={() => navigate(`/viewJobApp/${jobApplication.id}`)}>
-                <h3>{`Cargo: ${jobApplication.jobProfileLevel?.description}`}</h3>
-                <h2>{jobApplication.title}</h2>
-                <p>{`Periodo: ${jobApplication.jobApplicationPeriod?.description} ${jobApplication.yearPeriod}`}</p>
-                <div className={`status-badge ${jobApplication.jobApplicationStatus?.name.toLowerCase().replace(/\s/g, '-')}`}>
-                  {jobApplication.jobApplicationStatus?.description}
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )
-    }
   };
+
   const renderNewApplicationJobButton = () => {
     if (userClaim?.roles?.includes('RECRUITER')) {
       return (
@@ -233,6 +208,7 @@ export default function JobAppList() {
           <h1>Lista de Postulaciones</h1>
           <p>Seleccione una postulación de la lista para visualizarla</p>
           {renderNewApplicationJobButton()}
+
         </div>
 
         {renderApplicationJobs()}
