@@ -152,7 +152,121 @@ export default function ViewJobApp() {
   }, [id]);
 
   const renderByRole = () => {
+    if(userClaim?.roles?.includes('ADMIN')) {
+      return (
+      <>
+        <div className="app-container">
+          <div className="view-jobapp-header">
+            <div className="back-section">
+              <button
+                className="go-back-button"
+                onClick={() => navigate(-1)}
+              >
+                <ArrowBackIcon fontSize="large" />
+                Volver
+              </button>
+            </div>
+            { jobApplication?.jobApplicationStatus?.id !== PUBLISHED_STATUS_ID ? (<div className="managment-buttons">
+              <button className="managment-button-format aprove-button" onClick={() => handleApproval(true)}>
+                Aprobar
+              </button>
+              <button className="managment-button-format reject-button" onClick={() => handleApproval(false)}>
+                Rechazar
+              </button>
+              {showPublishButton ? (
+                <button
+                  className="managment-button-format publish-button"
+                  onClick={() => handlePublish()}
+                >
+                  Publicar
+                </button>
+              ) : null}
 
+              <button className="managment-button-format edit-button">
+                Editar
+              </button>
+            </div>) : (
+              <div className="managment-buttons"> 
+                <button className="managment-button-format edit-button" onClick={() => goToCandidateList()}>
+                  <ChecklistIcon fontSize="large"/>
+                Ver candidatos
+              </button>
+              </div>
+            )}
+            
+          </div>
+
+          <h1 style={{ textAlign: 'center' }}>{jobApplication.title}</h1>
+
+          <div className="jobapp-info">
+            <div className="info-row">
+              <span className="label">Tipo de docente:</span>
+              <span className="value">{`${jobApplication.jobProfileLevel?.description}`}</span>
+            </div>
+            <div className="info-row">
+              <span className="label">Período de búsqueda:</span>
+              <span className="value">{jobApplication.jobApplicationPeriod?.description}</span>
+            </div>
+            <div className="info-row">
+              <span className="label">Estado:</span>
+              <span className="value">{jobApplication.jobApplicationStatus?.description}</span>
+            </div>
+
+          </div>
+
+          <h2 style={{ textAlign: 'center', color: 'black' }}>Descripción</h2>
+          <div className="jobapp-info">
+            <div className="info-row">
+
+              <p className="formatted-text">{jobApplication.description}</p>
+            </div>
+
+          </div>
+
+          <div className="requirements-section">
+            <h2>Requisitos excluyentes</h2>
+            <ul className="requirements-list">
+              {mandatoryRequirements.map((req, index) => (
+                <li key={index}>
+                  {req.description}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="requirements-section">
+            <h2>Valoraciones / Deseables</h2>
+            <ul className="requirements-list">
+              {preferredRequirements.map((req, index) => (
+                <li key={index}>
+                  {req.description}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {isModalOpen && (
+          <div className="modal-overlay">
+
+            <div className="modal-content">
+              <h2>Ingrese el motivo de su decisión</h2>
+              <textarea
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Ingrese el motivo..."
+                rows="4"
+              />
+              <div className="back-section modal-buttons">
+                <button className="go-back-button" onClick={handleConfirm}>Aceptar</button>
+                <button className="go-back-button" onClick={handleCancel}>Cancelar</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
+      );
+    }
     if(userClaim?.roles?.includes('RECRUITER')) {
       return (
       <>
@@ -167,13 +281,8 @@ export default function ViewJobApp() {
               Volver
             </button>
           </div>
-          { jobApplication?.jobApplicationStatus?.id !== PUBLISHED_STATUS_ID ? (<div className="managment-buttons">
-            <button className="managment-button-format aprove-button" onClick={() => handleApproval(true)}>
-              Aprobar
-            </button>
-            <button className="managment-button-format reject-button" onClick={() => handleApproval(false)}>
-              Rechazar
-            </button>
+          { jobApplication?.jobApplicationStatus?.id !== PUBLISHED_STATUS_ID ? (
+            <div className="managment-buttons">
             {showPublishButton ? (
               <button
                 className="managment-button-format publish-button"
@@ -186,12 +295,13 @@ export default function ViewJobApp() {
             <button className="managment-button-format edit-button">
               Editar
             </button>
-          </div>) : (
+          </div>
+          ) : (
             <div className="managment-buttons"> 
               <button className="managment-button-format edit-button" onClick={() => goToCandidateList()}>
                 <ChecklistIcon fontSize="large"/>
-              Ver candidatos
-            </button>
+                Ver candidatos
+              </button>
             </div>
           )}
           

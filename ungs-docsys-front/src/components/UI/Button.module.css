@@ -1,0 +1,48 @@
+.btn {
+    border: none;
+    border-radius: 0.3rem;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn:hover {
+    opacity: 0.85;
+}
+
+.approve {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.reject {
+    background-color: #740d0dc2;
+    color: #df2323;
+}
+
+.btn-detalles {
+    margin-top: 0.5rem;
+    background: none;
+    color: #cbd5e1;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.btn-detalles:hover {
+    color: #60a5fa;
+}
+
+.default {
+    background-color: #f0f0f0; /* Gris claro */
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.gestionar {
+    background-color: #1d4ed8;
+    color: white;
+    padding: 0.5rem 0.8rem;
+}
