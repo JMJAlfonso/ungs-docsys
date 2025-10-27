@@ -72,6 +72,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, ROLE_RECRUITER_GET_ACCESS).hasRole("RECRUITER")
                         .requestMatchers(HttpMethod.POST, ROLE_CANDIDATE_POST_ACCESS).hasRole("CANDIDATE")
                         .requestMatchers(HttpMethod.GET, ROLE_CANDIDATE_GET_ACCESS).hasRole("CANDIDATE")
+                        .requestMatchers("/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

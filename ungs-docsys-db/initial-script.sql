@@ -2006,6 +2006,7 @@ INSERT INTO recruitment.requirement_type (id,"name",description) VALUES
 INSERT INTO recruitment."role" (id,"name",description) VALUES
 	 (1,'RECRUITER','Recruiter'),
 	 (2,'CANDIDATE','Candidate');
+     (3,'ADMIN','Administrator');
 	 
 INSERT INTO recruitment.job_application_period (id,code,description) VALUES
 	 (1,'FIRST_SEMESTER','1er semestre'),

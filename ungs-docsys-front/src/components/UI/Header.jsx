@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import logo from '../../assets/media/logodocsys.jpg';
 import './Header.css';
 
 const Header = ({ user = { name: "Doe, John", role: "Reclutador" }, navItems = [] }) => {
@@ -27,7 +28,7 @@ const Header = ({ user = { name: "Doe, John", role: "Reclutador" }, navItems = [
     <header className="header">
       <div className="header-top">
         <img
-          src="/src/assets/media/logodocsys.jpg"
+          src={logo}
           alt="docSYS Logo"
           className="logo"
           style={{ cursor: 'pointer' }}
